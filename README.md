@@ -2,29 +2,49 @@
 
 This demonstrates the use of https://github.com/henrist/aqmt
 
-## Getting started
+## Getting started using Docker
 
-Make sure you fulfill all the dependencies listed at the
-aqmt repository.
+Make sure you fulfill all the dependencies listed at the aqmt repository.
+The following description should normally be all you need.
 
-### Cloning repos and building dependencies
+This should work on a clean Ubuntu 17.04 install:
 
-The `Makefile` will clone required repositories, build and load
-the schedulers, and build other dependencies inside the aqmt
-project.
+Follow https://docs.docker.com/engine/installation/linux/ubuntu/
+to install Docker CE. On Ubuntu 17.04 you might need to change
+the target distribution from zesty to yakkety for Docker in
+`/etc/apt/sources.list`, because official zesty support will
+become stable in June 2017.
+
+Follow https://docs.docker.com/compose/install/ to install `docker-compose`.
+
+Follow https://docs.docker.com/engine/installation/linux/linux-postinstall/
+to be able to use Docker without sudo. (Note that this is similar to having
+full sudo access all time for that user.)
+
+```bash
+sudo apt install \
+  g++ \
+  libpcap-dev \
+  make
+
+git clone https://github.com/henrist/aqmt-example.git
+cd aqmt-example
+```
+
+### Cloning dependency repos and building dependencies
+
+The `Makefile` will clone the required repositories, build and load
+the schedulers, and build other dependencies inside the aqmt project.
 
 ```bash
 make
 ```
 
-If you are going to use Docker, also run:
+As we are going to use Docker, also run:
 
 ```bash
 make aqmt_docker
 ```
-
-Note that if you have not set up rootless usage of Docker, you will have to
-add `sudo` to the `docker-compose` commands in `Makefile`.
 
 This might take some time, as it will build the Docker image including our
 needed packages, compile iproute2, and add other utilities.
@@ -38,6 +58,7 @@ make start_docker
 ```
 
 If everything goes well, you will now have 6 running Docker containers.
+Go back to your first terminal.
 
 SSH into the AQM container:
 
@@ -83,3 +104,17 @@ directory which will contain all the test data, as well as plottings
 from the test!
 
 Now feel free to edit the example and design your own tests.
+
+Here is an image showing you a test in progress:
+
+![Test in progress](test-in-progress.png)
+
+Graph comparing the tests:
+
+![Comparison of tests](test-comparison.png)
+
+And to be able to get an understanding of what happened during a test,
+all tests generate a flow plot. Here is the one for fq_codel with
+50 Mbps and 50 ms base RTT:
+
+![Flow plot of fq_codel 50 mbit and 50 ms base RTT](test-fq-codel-50-50.png)
