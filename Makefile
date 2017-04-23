@@ -2,7 +2,7 @@ define build_install_module
 	@echo '----------------------------------------------'
 	@echo 'Processing module: $(1)'
 	@echo '----------------------------------------------'
-	cd $(1) && CPATH="$(shell pwd)/../aqmt/common" make
+	cd $(1) && CPATH="$(shell pwd)/aqmt/common" make
 	cd $(1) && sudo make unload >/dev/null 2>&1
 	cd $(1) && sudo make load
 endef
