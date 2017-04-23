@@ -7,9 +7,11 @@ This demonstrates the use of https://github.com/henrist/aqmt
 Make sure you fulfill all the dependencies listed at the
 aqmt repository.
 
-### Building all programs
+### Cloning repos and building dependencies
 
-Build (and load) the schedulers.
+The `Makefile` will clone required repositories, build and load
+the schedulers, and build other dependencies inside the aqmt
+project.
 
 ```bash
 make
