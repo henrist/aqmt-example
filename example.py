@@ -16,26 +16,29 @@ from aqmt.traffic import greedy
 def test(result_folder):
 
     def my_test(testcase):
-        testcase.traffic(greedy, node='a', tag='RENO')
-        testcase.traffic(greedy, node='b', tag='CUBIC')
+        testcase.traffic(greedy, node='a', tag='CUBIC')
+        testcase.traffic(greedy, node='b', tag='ECN-CUBIC')
 
     testbed = Testbed()
 
     testbed.ta_samples = 50
     testbed.ta_delay = 250
 
-    testbed.cc('a', 'reno', testbed.ECN_ALLOW)
-    testbed.cc('b', 'cubic', testbed.ECN_ALLOW)
+    testbed.cc('a', 'cubic', testbed.ECN_ALLOW)
+    testbed.cc('b', 'cubic', testbed.ECN_INITIATE)
 
     run_test(
         folder=result_folder,
-        title='Just a simple test to demonstrate simple usage',
+        title='Just a simple test to demonstrate usage',
         testenv=TestEnv(testbed),
         steps=(
             steps.plot_compare(level_order=[], components=[
                 collection_components.utilization_tags(),
+                collection_components.window_rate_ratio(),
                 collection_components.queueing_delay(),
+                collection_components.queueing_delay(y_logarithmic=True),
                 collection_components.drops_marks(),
+                collection_components.drops_marks(y_logarithmic=True),
             ]),
             steps.plot_flows(level_order=[], components=[
                 flow_components.utilization_queues(),
@@ -51,8 +54,8 @@ def test(result_folder):
             steps.branch_sched([
                 # tag, title, name, params
                 ('pie', 'PIE', 'pie', 'ecn'),
+                ('fq_codel', 'fq\\\\_codel', 'fq_codel', ''),
                 ('pfifo', 'pfifo', 'pfifo', ''),
-                ('fq_codel', 'fq_codel', 'fq_codel', ''),
             ]),
             steps.branch_bitrate([
                 10,
